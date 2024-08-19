@@ -1,0 +1,54 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    background-color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game {
+    width: 100vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+}
+
+#player {
+    width: calc(100vh / 15);
+    height: calc(100vh / 15);
+    background-color: #000;
+    position: absolute;
+}
+
+.x {
+    width: calc(100vh / 15);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.y {
+    width: calc(100vh / 15);
+    height: calc(100vh / 15);
+    image-rendering: pixelated;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.stone {
+    background-image: url("assets/stone.png");
+
+}
+
+.grass {
+    background-image: url("assets/grass.png");
+}
