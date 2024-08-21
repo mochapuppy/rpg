@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RPG</title>
+    <style>
+        * {
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        #app {
+            width: 100vw;
+            height: 100vh;
+            background-color: #222;
+            display: flex;
+            justify-content: center;
+        }
+
+        #game {
+            width: 100vh;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            overflow: hidden;
+        }
+
+        #map {
+            display: grid;
+            grid-template-columns: repeat(17, calc(100vh / 15));
+            grid-template-rows: repeat(17, calc(100vh / 15));
+
+        }
+
+        .tile {
+            width: calc(100vh / 15);
+            height: calc(100vh / 15);
+            border: 1px black solid;
+        }
+
+        #player {
+            position: absolute;
+            display: flex;
+            width: calc(100vh / 15);
+            height: calc(100vh / 15);
+            background-color: #000;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="game">
+            <div id="player"></div>
+            <div id="map"></div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
