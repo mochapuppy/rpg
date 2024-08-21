@@ -44,18 +44,26 @@
             grid-template-rows: repeat(17, var(--tile-size));
         }
 
-        .tile {
-            width: var(--tile-size);
-            height: var(--tile-size);
-            border: 1px black solid;
-        }
-
         #player {
             position: absolute;
             display: flex;
             width: var(--tile-size);
             height: var(--tile-size);
             background-color: #000;
+        }
+
+        .tile {
+            border: 1px solid black;
+            width: var(--tile-size);
+            height: var(--tile-size);
+        }
+
+        .grass {
+            background-image: url("assets/grass.png");
+        }
+
+        .stone {
+            background-image: url("assets/stone.png");
         }
 
     </style>
@@ -71,6 +79,6 @@
             </div>
         </div>
     </div>
-    <script src="game.js"></script>
+    <script type="module" src="game.js"></script>
 </body>
 </html>
