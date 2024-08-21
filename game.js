@@ -79,21 +79,35 @@ function drawMap() {
         for (let j = 0; j < (MAP_VIEW_SIZE + 2); j++) {
             let x = i + (player.pos.x - 8);
             let y = j + (player.pos.y - 8);
-            if (x < 0 || y < 0) {
+
+            let div = map.children[matrixToArray(i,j)];
+            if (div === undefined || div === null) {
+                console.log("Div. x: " + x + " y: " + y + " i: " + i + " j: " + j);
                 continue;
             }
-            let tileDiv = map.children[matrixToArray(x,y)];
+
+            let classList = div.classList;
+            if (classList === undefined || classList === null) {
+                console.log("classlist. x: " + x + " y: " + y + " i: " + i + " j: " + j);
+                continue;
+            }
+
+            if (x < 0 || y < 0) {
+                classList.remove('grass', 'stone');
+                continue;
+            }
+
             switch (tileMap[x][y]) {
                 case 0:
-                    tileDiv.classList.remove('grass', 'stone');
+                    classList.remove('grass', 'stone');
                     break;
                 case 1:
-                    tileDiv.classList.add('grass');
-                    tileDiv.classList.remove('stone');
+                    classList.add('grass');
+                    classList.remove('stone');
                     break;
                 case 2:
-                    tileDiv.classList.add('stone');
-                    tileDiv.classList.remove('grass');
+                    classList.add('stone');
+                    classList.remove('grass');
             }
         }
     }
