@@ -13,6 +13,10 @@
             box-sizing: border-box;
         }
 
+        #coords {
+            position: absolute;
+        }
+
         #app {
             width: 100vw;
             height: 100vh;
@@ -54,7 +58,6 @@
         }
 
         .tile {
-            border: 1px solid #00000022;
             width: var(--tile-size);
             height: var(--tile-size);
             background-repeat: no-repeat;
@@ -74,7 +77,6 @@
 </head>
 <body>
     <div id="app">
-        <div id="coords" style="color: #fff; font-family: 'Helvetica';">Position</div> <!-- Testing -->
         <div id="game">
             <div id="translate-x">
                 <div id="translate-y">
@@ -83,6 +85,7 @@
             </div>
             <div id="player"></div>
         </div>
+        <div id="coords" style="color: #fff; font-family: 'Helvetica',serif;">Position</div> <!-- Testing -->
     </div>
     <script type="module" src="game.js"></script>
 </body>

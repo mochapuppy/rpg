@@ -16,7 +16,7 @@ class Player {
 const assetManager = new AssetManager();
 const MAP_VIEW_SIZE = 15;
 let tileMap;
-let player = new Player(new Vector(10,10));
+let player = new Player(new Vector(4,4));
 let map = document.getElementById('map');
 let mapTranslateY = document.getElementById('translate-y');
 let mapTranslateX = document.getElementById('translate-x');
@@ -49,7 +49,6 @@ document.addEventListener('keydown', function(e) {
             break;
     }
 
-    drawMap();
     coords.innerText = player.pos.x + " " + player.pos.y;
 });
 
@@ -116,11 +115,14 @@ function drawMap() {
 mapTranslateY.addEventListener('transitionend', function() {
     mapTranslateY.style.transform = 'translate(0, 0)';
     mapTranslateY.style.transition = 'transform 0s';
+    drawMap();
 });
 
+// TODO figure out why this function triggers when mapTranslateY has an animation???
 mapTranslateX.addEventListener('transitionend', function() {
     mapTranslateX.style.transform = 'translate(0, 0)';
     mapTranslateX.style.transition = 'transform 0s';
+    drawMap();
 });
 
 function assetManagerCallback() {
@@ -132,6 +134,7 @@ function assetManagerCallback() {
             tileMap[i][j] = parseInt(tileMap[i][j]);
         }
     }
+    drawMap();
 }
 
 function arrayToMatrix(arr) {
