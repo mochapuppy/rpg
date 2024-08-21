@@ -22,6 +22,9 @@ let mapTranslateY = document.getElementById('translate-y');
 let mapTranslateX = document.getElementById('translate-x');
 let input = {forward:'w',back:'s',left:'a',right:'d'};
 
+// Testing
+let coords = document.getElementById('coords');
+
 for (let i = 0; i < (MAP_VIEW_SIZE + 2) ** 2; i++) {
     map.innerHTML += '<div class="tile"></div>'
 }
@@ -31,25 +34,23 @@ document.addEventListener('keydown', function(e) {
         case input.forward:
             translateMap('forward');
             player.pos.y--;
-            drawMap();
             break;
         case input.back:
             translateMap('back');
             player.pos.y++;
-            drawMap();
             break;
         case input.left:
             translateMap('left');
             player.pos.x--;
-            drawMap();
             break;
         case input.right:
             translateMap('right');
             player.pos.x++;
-            drawMap();
             break;
-
     }
+
+    drawMap();
+    coords.innerText = player.pos.x + " " + player.pos.y;
 });
 
 function translateMap(direction) {
@@ -78,6 +79,9 @@ function drawMap() {
         for (let j = 0; j < (MAP_VIEW_SIZE + 2); j++) {
             let x = i + (player.pos.x - 8);
             let y = j + (player.pos.y - 8);
+            if (x < 0 || y < 0) {
+                continue;
+            }
             let tileDiv = map.children[matrixToArray(x,y)];
             switch (tileMap[x][y]) {
                 case 0:
@@ -110,6 +114,9 @@ function assetManagerCallback() {
     tileMap = tileMap.split("\n");
     for (let i = 0; i < tileMap.length; i++) {
         tileMap[i] = tileMap[i].split(",");
+        for (let j = 0; j < tileMap[i].length; j++) {
+            tileMap[i][j] = parseInt(tileMap[i][j]);
+        }
     }
 }
 

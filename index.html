@@ -45,6 +45,7 @@
         }
 
         #player {
+            z-index: 1;
             position: absolute;
             display: flex;
             width: var(--tile-size);
@@ -53,9 +54,12 @@
         }
 
         .tile {
-            border: 1px solid black;
+            border: 1px solid #00000022;
             width: var(--tile-size);
             height: var(--tile-size);
+            background-repeat: no-repeat;
+            background-size: cover;
+            image-rendering: pixelated;
         }
 
         .grass {
@@ -70,13 +74,14 @@
 </head>
 <body>
     <div id="app">
+        <div id="coords" style="color: #fff; font-family: 'Helvetica';">Position</div> <!-- Testing -->
         <div id="game">
-            <div id="player"></div>
             <div id="translate-x">
                 <div id="translate-y">
                     <div id="map"></div>
                 </div>
             </div>
+            <div id="player"></div>
         </div>
     </div>
     <script type="module" src="game.js"></script>
