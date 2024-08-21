@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>RPG</title>
     <style>
+        :root {
+            --tile-size: calc(100vh / 15);
+        }
+
         * {
             margin: 0;
             box-sizing: border-box;
@@ -26,24 +30,31 @@
             overflow: hidden;
         }
 
+        #translate-x {
+            display: flex;
+        }
+
+        #translate-y {
+            display: flex;
+        }
+
         #map {
             display: grid;
-            grid-template-columns: repeat(17, calc(100vh / 15));
-            grid-template-rows: repeat(17, calc(100vh / 15));
-
+            grid-template-columns: repeat(17, var(--tile-size));
+            grid-template-rows: repeat(17, var(--tile-size));
         }
 
         .tile {
-            width: calc(100vh / 15);
-            height: calc(100vh / 15);
+            width: var(--tile-size);
+            height: var(--tile-size);
             border: 1px black solid;
         }
 
         #player {
             position: absolute;
             display: flex;
-            width: calc(100vh / 15);
-            height: calc(100vh / 15);
+            width: var(--tile-size);
+            height: var(--tile-size);
             background-color: #000;
         }
 
@@ -53,7 +64,11 @@
     <div id="app">
         <div id="game">
             <div id="player"></div>
-            <div id="map"></div>
+            <div id="translate-x">
+                <div id="translate-y">
+                    <div id="map"></div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="game.js"></script>
