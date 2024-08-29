@@ -1,7 +1,5 @@
 import AssetManager from "./asset_manager.js";
 
-console.log("Hello World!");
-
 class Vector {
     constructor(x, y) {
         this.x = x;
