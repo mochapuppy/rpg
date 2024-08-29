@@ -21,6 +21,7 @@ let map = document.getElementById('map');
 let mapTranslateY = document.getElementById('translate-y');
 let mapTranslateX = document.getElementById('translate-x');
 let input = {forward:'w',back:'s',left:'a',right:'d'};
+let immovableTiles = [2, 3];
 
 // Testing
 let coords = document.getElementById('coords');
@@ -32,24 +33,36 @@ for (let i = 0; i < (MAP_VIEW_SIZE + 2) ** 2; i++) {
 document.addEventListener('keydown', function(e) {
     switch (e.key.toLowerCase()) {
         case input.forward:
+            if (!tileIsMovable(player.pos.x, player.pos.y - 1)) {
+                break;
+            }
             translateMap('forward');
             player.pos.y--;
             break;
         case input.back:
+            if (!tileIsMovable(player.pos.x, player.pos.y + 1)) {
+                break;
+            }
             translateMap('back');
             player.pos.y++;
             break;
         case input.left:
+            if (!tileIsMovable(player.pos.x - 1, player.pos.y)) {
+                break;
+            }
             translateMap('left');
             player.pos.x--;
             break;
         case input.right:
+            if (!tileIsMovable(player.pos.x + 1, player.pos.y)) {
+                break;
+            }
             translateMap('right');
             player.pos.x++;
             break;
     }
 
-    coords.innerText = player.pos.x + " " + player.pos.y;
+    coords.innerText = player.pos.x + " " + player.pos.y; // Testing
 });
 
 function translateMap(direction) {
@@ -96,6 +109,11 @@ function drawMap() {
                 continue;
             }
 
+            if (x > tileMap[0].length - 1 || y > tileMap[0].length - 1) {
+                classList.remove('grass', 'stone');
+                continue;
+            }
+
             switch (tileMap[x][y]) {
                 case 0:
                     classList.remove('grass', 'stone');
@@ -112,16 +130,22 @@ function drawMap() {
     }
 }
 
-mapTranslateY.addEventListener('transitionend', function() {
-    mapTranslateY.style.transform = 'translate(0, 0)';
-    mapTranslateY.style.transition = 'transform 0s';
-    drawMap();
-});
+function tileIsMovable(x, y) {
+    if (immovableTiles.includes(tileMap[x][y])) {
+        return false;
+    }
+    return true;
+}
 
-// TODO figure out why this function triggers when mapTranslateY has an animation???
 mapTranslateX.addEventListener('transitionend', function() {
     mapTranslateX.style.transform = 'translate(0, 0)';
     mapTranslateX.style.transition = 'transform 0s';
+    drawMap();
+});
+
+mapTranslateY.addEventListener('transitionend', function() {
+    mapTranslateY.style.transform = 'translate(0, 0)';
+    mapTranslateY.style.transition = 'transform 0s';
     drawMap();
 });
 
