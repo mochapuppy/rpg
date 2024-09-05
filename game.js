@@ -137,13 +137,19 @@ function tileIsMovable(x, y) {
     return true;
 }
 
-mapTranslateX.addEventListener('transitionend', function() {
+mapTranslateX.addEventListener('transitionend', function(event) {
+    event.stopPropagation();
+    console.log("x")
+
     mapTranslateX.style.transform = 'translate(0, 0)';
     mapTranslateX.style.transition = 'transform 0s';
     drawMap();
 });
 
-mapTranslateY.addEventListener('transitionend', function() {
+mapTranslateY.addEventListener('transitionend', function(event) {
+    event.stopPropagation();
+    console.log("y")
+
     mapTranslateY.style.transform = 'translate(0, 0)';
     mapTranslateY.style.transition = 'transform 0s';
     drawMap();
