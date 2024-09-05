@@ -69,15 +69,23 @@ function translateMap(direction) {
     const speed = `0.13s`;
     switch(direction) {
         case 'forward':
+            mapTranslateY.style.animation = `none`
+            void mapTranslateY.offsetWidth;
             mapTranslateY.style.animation = `move-down ` + speed;
             break;
         case 'back':
+            mapTranslateY.style.animation = `none`
+            void mapTranslateY.offsetWidth;
             mapTranslateY.style.animation = `move-up ` + speed;
             break;
         case 'left':
+            mapTranslateX.style.animation = `none`
+            void mapTranslateX.offsetWidth;
             mapTranslateX.style.animation = `move-right ` + speed;
             break;
         case 'right':
+            mapTranslateX.style.animation = `none`
+            void mapTranslateX.offsetWidth;
             mapTranslateX.style.animation = `move-left ` + speed;
             break;
     }
