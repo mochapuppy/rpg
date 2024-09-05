@@ -61,27 +61,24 @@ document.addEventListener('keydown', function(e) {
             player.pos.x++;
             break;
     }
-
+    drawMap();
     coords.innerText = player.pos.x + " " + player.pos.y; // Testing
 });
 
 function translateMap(direction) {
+    const speed = `0.13s`;
     switch(direction) {
         case 'forward':
-            mapTranslateY.style.transform = `translateY(calc(100vh / ${MAP_VIEW_SIZE}))`;
-            mapTranslateY.style.transition = `transform 0.13s`;
+            mapTranslateY.style.animation = `move-down ` + speed;
             break;
         case 'back':
-            mapTranslateY.style.transform = `translateY(calc(-100vh / ${MAP_VIEW_SIZE}))`;
-            mapTranslateY.style.transition = `transform 0.13s`;
+            mapTranslateY.style.animation = `move-up ` + speed;
             break;
         case 'left':
-            mapTranslateX.style.transform = `translateX(calc(100vh / ${MAP_VIEW_SIZE}))`;
-            mapTranslateX.style.transition = `transform 0.13s`;
+            mapTranslateX.style.animation = `move-right ` + speed;
             break;
         case 'right':
-            mapTranslateX.style.transform = `translateX(calc(-100vh / ${MAP_VIEW_SIZE}))`;
-            mapTranslateX.style.transition = `transform 0.13s`;
+            mapTranslateX.style.animation = `move-left ` + speed;
             break;
     }
 }
@@ -136,24 +133,6 @@ function tileIsMovable(x, y) {
     }
     return true;
 }
-
-mapTranslateX.addEventListener('transitionend', function(event) {
-    event.stopPropagation();
-    console.log("x")
-
-    mapTranslateX.style.transform = 'translate(0, 0)';
-    mapTranslateX.style.transition = 'transform 0s';
-    drawMap();
-});
-
-mapTranslateY.addEventListener('transitionend', function(event) {
-    event.stopPropagation();
-    console.log("y")
-
-    mapTranslateY.style.transform = 'translate(0, 0)';
-    mapTranslateY.style.transition = 'transform 0s';
-    drawMap();
-});
 
 function assetManagerCallback() {
     tileMap = assetManager.get('map');

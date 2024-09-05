@@ -1,0 +1,35 @@
+@keyframes move-up {
+    0% {
+        transform: translateY(var(--tile-size));
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes move-down {
+    0% {
+        transform: translateY(calc(var(--tile-size) * -1));
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes move-left {
+    0% {
+        transform: translateX(var(--tile-size));
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes move-right {
+    0% {
+        transform: translateX(calc(var(--tile-size) * -1));
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
