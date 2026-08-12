@@ -14,6 +14,19 @@ class Player {
     }
 }
 
+const canvas = document.getElementById("game-canvas");
+const ctx = canvas.getContext("2d");
+
+ctx.imageSmoothingEnabled = false;
+
+const TILE_SIZE = 32;
+
+const grassImage = new Image();
+grassImage.src = "assets/grass.png";
+
+const stoneImage = new Image();
+stoneImage.src = "assets/stone.png";
+
 const assetManager = new AssetManager();
 const MAP_VIEW_SIZE = 15;
 let tileMap;
@@ -28,8 +41,65 @@ let immovableTiles = [2, 3];
 // Testing
 let coords = document.getElementById('coords');
 
+
 for (let i = 0; i < (MAP_VIEW_SIZE + 2) ** 2; i++) {
     map.innerHTML += '<div class="tile"></div>'
+}
+
+function drawTile(tileId, screenX, screenY) {
+    const pixelX = screenX * TILE_SIZE;
+    const pixelY = screenY * TILE_SIZE;
+
+    switch (tileId) {
+        case 1:
+            ctx.drawImage(
+                grassImage,
+                pixelX,
+                pixelY,
+                TILE_SIZE,
+                TILE_SIZE
+            );
+            break;
+
+        case 2:
+            ctx.drawImage(
+                stoneImage,
+                pixelX,
+                pixelY,
+                TILE_SIZE,
+                TILE_SIZE
+            );
+            break;
+    }
+}
+
+function drawCanvasMap() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const halfView = Math.floor((MAP_VIEW_SIZE + 2) / 2);
+
+    for (let screenY = 0; screenY < MAP_VIEW_SIZE + 2; screenY++) {
+        for (let screenX = 0; screenX < MAP_VIEW_SIZE + 2; screenX++) {
+
+            const mapX = player.pos.x - halfView + screenX;
+            const mapY = player.pos.y - halfView + screenY;
+
+            if (
+                mapY < 0 ||
+                mapY >= tileMap.length ||
+                mapX < 0 ||
+                mapX >= tileMap[mapY].length
+            ) {
+                continue;
+            }
+
+            drawTile(
+                tileMap[mapY][mapX],
+                screenX,
+                screenY
+            );
+        }
+    }
 }
 
 document.addEventListener('keydown', function(e) {
@@ -68,7 +138,8 @@ document.addEventListener('keydown', function(e) {
             break;
     }
     updatePlayerSprite();
-    drawMap();
+    // drawMap();
+    drawCanvasMap();
     coords.innerText = player.pos.x + " " + player.pos.y; // Testing
 });
 
@@ -179,7 +250,8 @@ function assetManagerCallback() {
         .split("\n")
         .map(row => row.split(",").map(Number));
 
-    drawMap();
+    // drawMap();
+    drawCanvasMap();
 }
 
 function matrixToArray(x, y) {
