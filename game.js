@@ -8,18 +8,20 @@ class Vector {
 }
 
 class Player {
-    constructor(pos) {
+    constructor(pos, rot) {
         this.pos = pos;
+        this.rot = rot;
     }
 }
 
 const assetManager = new AssetManager();
 const MAP_VIEW_SIZE = 15;
 let tileMap;
-let player = new Player(new Vector(4,4));
+let player = new Player(new Vector(4,4), 0);
 let map = document.getElementById('map');
 let mapTranslateY = document.getElementById('translate-y');
 let mapTranslateX = document.getElementById('translate-x');
+let playerSprite = document.getElementById("player");
 let input = {forward:'w',back:'s',left:'a',right:'d'};
 let immovableTiles = [2, 3];
 
@@ -33,6 +35,7 @@ for (let i = 0; i < (MAP_VIEW_SIZE + 2) ** 2; i++) {
 document.addEventListener('keydown', function(e) {
     switch (e.key.toLowerCase()) {
         case input.forward:
+            player.rot = 0;
             if (!tileIsMovable(player.pos.x, player.pos.y - 1)) {
                 break;
             }
@@ -40,6 +43,7 @@ document.addEventListener('keydown', function(e) {
             player.pos.y--;
             break;
         case input.back:
+            player.rot = 180;
             if (!tileIsMovable(player.pos.x, player.pos.y + 1)) {
                 break;
             }
@@ -47,6 +51,7 @@ document.addEventListener('keydown', function(e) {
             player.pos.y++;
             break;
         case input.left:
+            player.rot = 270;
             if (!tileIsMovable(player.pos.x - 1, player.pos.y)) {
                 break;
             }
@@ -54,6 +59,7 @@ document.addEventListener('keydown', function(e) {
             player.pos.x--;
             break;
         case input.right:
+            player.rot = 90;
             if (!tileIsMovable(player.pos.x + 1, player.pos.y)) {
                 break;
             }
@@ -61,6 +67,7 @@ document.addEventListener('keydown', function(e) {
             player.pos.x++;
             break;
     }
+    updatePlayerSprite();
     drawMap();
     coords.innerText = player.pos.x + " " + player.pos.y; // Testing
 });
@@ -114,12 +121,12 @@ function drawMap() {
                 continue;
             }
 
-            if (x > tileMap[0].length - 1 || y > tileMap[0].length - 1) {
+            if (y >= tileMap.length || x >= tileMap[y].length) {
                 classList.remove('grass', 'stone');
                 continue;
             }
 
-            switch (tileMap[x][y]) {
+            switch (tileMap[y][x]) {
                 case 0:
                     classList.remove('grass', 'stone');
                     break;
@@ -135,29 +142,44 @@ function drawMap() {
     }
 }
 
+function updatePlayerSprite() {
+    switch (player.rot) {
+        case 0:
+            playerSprite.style.backgroundImage = 'url("assets/player0.png")';
+            break;
+        case 90:
+            playerSprite.style.backgroundImage = 'url("assets/player1.png")';
+            break;
+        case 180:
+            playerSprite.style.backgroundImage = 'url("assets/player2.png")';
+            break;
+        case 270:
+            playerSprite.style.backgroundImage = 'url("assets/player3.png")';
+            break;
+    }
+}
+
 function tileIsMovable(x, y) {
-    if (immovableTiles.includes(tileMap[x][y])) {
+    if (
+        y < 0 ||
+        y >= tileMap.length ||
+        x < 0 ||
+        x >= tileMap[y].length
+    ) {
         return false;
     }
-    return true;
+
+    return !immovableTiles.includes(tileMap[y][x]);
 }
 
 function assetManagerCallback() {
-    tileMap = assetManager.get('map');
-    tileMap = tileMap.split("\n");
-    for (let i = 0; i < tileMap.length; i++) {
-        tileMap[i] = tileMap[i].split(",");
-        for (let j = 0; j < tileMap[i].length; j++) {
-            tileMap[i][j] = parseInt(tileMap[i][j]);
-        }
-    }
-    drawMap();
-}
+    tileMap = assetManager
+        .get('map')
+        .trim()
+        .split("\n")
+        .map(row => row.split(",").map(Number));
 
-function arrayToMatrix(arr) {
-    let x = (arr % (MAP_VIEW_SIZE + 2));
-    let y = Math.floor(y / ((MAP_VIEW_SIZE + 2)));
-    return new Vector(x, y);
+    drawMap();
 }
 
 function matrixToArray(x, y) {

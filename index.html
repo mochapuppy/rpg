@@ -54,7 +54,10 @@
             display: flex;
             width: var(--tile-size);
             height: var(--tile-size);
-            background-color: #000;
+            background-size: cover;
+            image-rendering: pixelated;
+            background-repeat: no-repeat;
+            background-image: url("assets/player0.png");
         }
 
         .tile {
@@ -63,6 +66,7 @@
             background-repeat: no-repeat;
             background-size: cover;
             image-rendering: pixelated;
+            /*border: 1px black solid;*/
         }
 
         .grass {
