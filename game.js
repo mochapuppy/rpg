@@ -12,6 +12,9 @@ class Player {
         this.pos = pos;
         this.rot = rot;
         this.speed = 4; // tiles per second
+
+        this.width = 0.6;
+        this.height = 0.6;
     }
 }
 
@@ -89,8 +92,17 @@ function update(deltaTime) {
         moveY /= length;
     }
 
-    player.pos.x += moveX * player.speed * deltaTime;
-    player.pos.y += moveY * player.speed * deltaTime;
+    const nextX = player.pos.x + moveX * player.speed * deltaTime;
+
+    const nextY = player.pos.y + moveY * player.speed * deltaTime;
+
+    if (positionIsWalkable(nextX, player.pos.y)) {
+        player.pos.x = nextX;
+    }
+
+    if (positionIsWalkable(player.pos.x, nextY)) {
+        player.pos.y = nextY;
+    }
 }
 
 let lastTime = performance.now();
@@ -186,31 +198,58 @@ function render() {
 }
 
 function drawCanvasPlayer() {
-    const centerTile = Math.floor(VIEW_TILE_COUNT / 2);
-
     const imageIndex = player.rot / 45;
     const image = playerImages[imageIndex];
 
+    const spriteSize = RENDER_TILE_SIZE;
+
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
     ctx.drawImage(
         image,
-        centerTile * RENDER_TILE_SIZE,
-        centerTile * RENDER_TILE_SIZE,
-        RENDER_TILE_SIZE,
-        RENDER_TILE_SIZE
+        Math.round(centerX - spriteSize / 2),
+        Math.round(centerY - spriteSize / 2),
+        spriteSize,
+        spriteSize
     );
 }
 
-function tileIsMovable(x, y) {
-    if (
-        y < 0 ||
-        y >= tileMap.length ||
-        x < 0 ||
-        x >= tileMap[y].length
-    ) {
-        return false;
+function positionIsWalkable(x, y) {
+    const halfWidth = player.width / 2;
+    const halfHeight = player.height / 2;
+
+    const left   = x - halfWidth;
+    const right  = x + halfWidth;
+    const top    = y - halfHeight;
+    const bottom = y + halfHeight;
+
+    const EPSILON = 0.0001;
+
+    const leftTile   = Math.floor(left);
+    const rightTile  = Math.floor(right - EPSILON);
+    const topTile    = Math.floor(top);
+    const bottomTile = Math.floor(bottom - EPSILON);
+
+    for (let tileY = topTile; tileY <= bottomTile; tileY++) {
+        for (let tileX = leftTile; tileX <= rightTile; tileX++) {
+
+            if (
+                tileY < 0 ||
+                tileY >= tileMap.length ||
+                tileX < 0 ||
+                tileX >= tileMap[tileY].length
+            ) {
+                return false;
+            }
+
+            if (immovableTiles.includes(tileMap[tileY][tileX])) {
+                return false;
+            }
+        }
     }
 
-    return !immovableTiles.includes(tileMap[y][x]);
+    return true;
 }
 
 function assetManagerCallback() {
