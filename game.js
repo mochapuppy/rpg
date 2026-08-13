@@ -20,7 +20,10 @@ const ctx = canvas.getContext("2d");
 
 const VIEW_TILE_COUNT = 11;
 const TILE_SIZE = 16;
-const CANVAS_SIZE = VIEW_TILE_COUNT * TILE_SIZE;
+const RENDER_SCALE = 4;
+const RENDER_TILE_SIZE = TILE_SIZE * RENDER_SCALE;
+
+const CANVAS_SIZE = VIEW_TILE_COUNT * RENDER_TILE_SIZE;
 
 canvas.width = CANVAS_SIZE;
 canvas.height = CANVAS_SIZE;
@@ -33,17 +36,13 @@ grassImage.src = "assets/grass.png";
 const stoneImage = new Image();
 stoneImage.src = "assets/stone.png";
 
-const playerImages = [
-    new Image(),
-    new Image(),
-    new Image(),
-    new Image()
-];
+const playerImages = [];
 
-playerImages[0].src = "assets/player0.png";
-playerImages[1].src = "assets/player1.png";
-playerImages[2].src = "assets/player2.png";
-playerImages[3].src = "assets/player3.png";
+for (let i = 0; i < 8; i++) {
+    const image = new Image();
+    image.src = `assets/player${i}.png`;
+    playerImages.push(image);
+}
 
 const assetManager = new AssetManager();
 let tileMap;
@@ -68,29 +67,24 @@ function update(deltaTime) {
     let moveX = 0;
     let moveY = 0;
 
-    if (keys[input.forward]) {
-        moveY -= 1;
-        player.rot = 0;
-    }
+    if (keys[input.forward]) moveY -= 1;
+    if (keys[input.back])    moveY += 1;
+    if (keys[input.left])    moveX -= 1;
+    if (keys[input.right])   moveX += 1;
 
-    if (keys[input.back]) {
-        moveY += 1;
-        player.rot = 180;
-    }
+    // Set facing direction
+    if (moveX === 0 && moveY < 0)       player.rot = 0;
+    else if (moveX > 0 && moveY < 0)    player.rot = 45;
+    else if (moveX > 0 && moveY === 0)  player.rot = 90;
+    else if (moveX > 0 && moveY > 0)    player.rot = 135;
+    else if (moveX === 0 && moveY > 0)  player.rot = 180;
+    else if (moveX < 0 && moveY > 0)    player.rot = 225;
+    else if (moveX < 0 && moveY === 0)  player.rot = 270;
+    else if (moveX < 0 && moveY < 0)    player.rot = 315;
 
-    if (keys[input.left]) {
-        moveX -= 1;
-        player.rot = 270;
-    }
-
-    if (keys[input.right]) {
-        moveX += 1;
-        player.rot = 90;
-    }
-
+    // Normalize diagonal movement
     if (moveX !== 0 && moveY !== 0) {
-        const length = Math.sqrt(moveX * moveX + moveY * moveY);
-
+        const length = Math.hypot(moveX, moveY);
         moveX /= length;
         moveY /= length;
     }
@@ -116,27 +110,28 @@ function gameLoop(currentTime) {
 }
 
 function drawTile(tileId, pixelX, pixelY) {
+    let image;
+
     switch (tileId) {
         case 1:
-            ctx.drawImage(
-                grassImage,
-                pixelX,
-                pixelY,
-                TILE_SIZE,
-                TILE_SIZE
-            );
+            image = grassImage;
             break;
 
         case 2:
-            ctx.drawImage(
-                stoneImage,
-                pixelX,
-                pixelY,
-                TILE_SIZE,
-                TILE_SIZE
-            );
+            image = stoneImage;
             break;
+
+        default:
+            return;
     }
+
+    ctx.drawImage(
+        image,
+        pixelX,
+        pixelY,
+        RENDER_TILE_SIZE,
+        RENDER_TILE_SIZE
+    );
 }
 
 function render() {
@@ -148,11 +143,11 @@ function render() {
     const playerTileY = Math.floor(player.pos.y);
 
     const offsetX = Math.round(
-        (player.pos.x - playerTileX) * TILE_SIZE
+        (player.pos.x - playerTileX) * RENDER_TILE_SIZE
     );
 
     const offsetY = Math.round(
-        (player.pos.y - playerTileY) * TILE_SIZE
+        (player.pos.y - playerTileY) * RENDER_TILE_SIZE
     );
 
     for (let screenY = -1; screenY <= VIEW_TILE_COUNT; screenY++) {
@@ -174,10 +169,10 @@ function render() {
             }
 
             const pixelX =
-                screenX * TILE_SIZE - offsetX;
+                screenX * RENDER_TILE_SIZE - offsetX;
 
             const pixelY =
-                screenY * TILE_SIZE - offsetY;
+                screenY * RENDER_TILE_SIZE - offsetY;
 
             drawTile(
                 tileMap[mapY][mapX],
@@ -193,29 +188,15 @@ function render() {
 function drawCanvasPlayer() {
     const centerTile = Math.floor(VIEW_TILE_COUNT / 2);
 
-    let image;
-
-    switch (player.rot) {
-        case 0:
-            image = playerImages[0];
-            break;
-        case 90:
-            image = playerImages[1];
-            break;
-        case 180:
-            image = playerImages[2];
-            break;
-        case 270:
-            image = playerImages[3];
-            break;
-    }
+    const imageIndex = player.rot / 45;
+    const image = playerImages[imageIndex];
 
     ctx.drawImage(
         image,
-        centerTile * TILE_SIZE,
-        centerTile * TILE_SIZE,
-        TILE_SIZE,
-        TILE_SIZE
+        centerTile * RENDER_TILE_SIZE,
+        centerTile * RENDER_TILE_SIZE,
+        RENDER_TILE_SIZE,
+        RENDER_TILE_SIZE
     );
 }
 
