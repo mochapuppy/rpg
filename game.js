@@ -19,9 +19,9 @@ const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = false;
 
-const MAP_VIEW_SIZE = 15;
-const VIEW_TILE_COUNT = MAP_VIEW_SIZE + 2;
+const VIEW_TILE_COUNT = 11;
 const TILE_SIZE = 16;
+const CANVAS_SIZE = VIEW_TILE_COUNT * TILE_SIZE;
 
 const grassImage = new Image();
 grassImage.src = "assets/grass.png";
@@ -111,10 +111,7 @@ function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
 }
 
-function drawTile(tileId, screenX, screenY) {
-    const pixelX = screenX * TILE_SIZE;
-    const pixelY = screenY * TILE_SIZE;
-
+function drawTile(tileId, pixelX, pixelY) {
     switch (tileId) {
         case 1:
             ctx.drawImage(
@@ -143,14 +140,23 @@ function render() {
 
     const halfView = Math.floor(VIEW_TILE_COUNT / 2);
 
-    for (let screenY = 0; screenY < VIEW_TILE_COUNT; screenY++) {
-        for (let screenX = 0; screenX < VIEW_TILE_COUNT; screenX++) {
+    const playerTileX = Math.floor(player.pos.x);
+    const playerTileY = Math.floor(player.pos.y);
 
-            const playerTileX = Math.floor(player.pos.x);
-            const playerTileY = Math.floor(player.pos.y);
+    const offsetX =
+        (player.pos.x - playerTileX) * TILE_SIZE;
 
-            const mapX = playerTileX - halfView + screenX;
-            const mapY = playerTileY - halfView + screenY;
+    const offsetY =
+        (player.pos.y - playerTileY) * TILE_SIZE;
+
+    for (let screenY = -1; screenY <= VIEW_TILE_COUNT; screenY++) {
+        for (let screenX = -1; screenX <= VIEW_TILE_COUNT; screenX++) {
+
+            const mapX =
+                playerTileX - halfView + screenX;
+
+            const mapY =
+                playerTileY - halfView + screenY;
 
             if (
                 mapY < 0 ||
@@ -161,10 +167,16 @@ function render() {
                 continue;
             }
 
+            const pixelX =
+                screenX * TILE_SIZE - offsetX;
+
+            const pixelY =
+                screenY * TILE_SIZE - offsetY;
+
             drawTile(
                 tileMap[mapY][mapX],
-                screenX,
-                screenY
+                pixelX,
+                pixelY
             );
         }
     }
