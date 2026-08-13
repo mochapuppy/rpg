@@ -93,7 +93,7 @@ function update(deltaTime) {
     }
 
     // Sprint
-    const currentSpeed = keys["shift"]
+    const currentSpeed = keys["control"]
         ? player.speed * 1.50
         : player.speed;
 
