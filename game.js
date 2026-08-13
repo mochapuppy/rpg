@@ -92,9 +92,14 @@ function update(deltaTime) {
         moveY /= length;
     }
 
-    const nextX = player.pos.x + moveX * player.speed * deltaTime;
+    // Sprint
+    const currentSpeed = keys["shift"]
+        ? player.speed * 1.50
+        : player.speed;
 
-    const nextY = player.pos.y + moveY * player.speed * deltaTime;
+    const nextX = player.pos.x + moveX * currentSpeed * deltaTime;
+
+    const nextY = player.pos.y + moveY * currentSpeed * deltaTime;
 
     if (positionIsWalkable(nextX, player.pos.y)) {
         player.pos.x = nextX;
@@ -181,10 +186,14 @@ function render() {
             }
 
             const pixelX =
-                screenX * RENDER_TILE_SIZE - offsetX;
+                screenX * RENDER_TILE_SIZE
+                - offsetX
+                + RENDER_TILE_SIZE / 2;
 
             const pixelY =
-                screenY * RENDER_TILE_SIZE - offsetY;
+                screenY * RENDER_TILE_SIZE
+                - offsetY
+                + RENDER_TILE_SIZE / 2;
 
             drawTile(
                 tileMap[mapY][mapX],
