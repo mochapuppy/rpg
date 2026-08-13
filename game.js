@@ -11,6 +11,7 @@ class Player {
     constructor(pos, rot) {
         this.pos = pos;
         this.rot = rot;
+        this.speed = 4; // tiles per second
     }
 }
 
@@ -49,44 +50,66 @@ let immovableTiles = [2, 3];
 // Testing
 let coords = document.getElementById('coords');
 
-document.addEventListener('keydown', function(e) {
-    switch (e.key.toLowerCase()) {
-        case input.forward:
-            player.rot = 0;
+const keys = {};
 
-            if (tileIsMovable(player.pos.x, player.pos.y - 1)) {
-                player.pos.y--;
-            }
-            break;
+document.addEventListener("keydown", function(e) {
+    keys[e.key.toLowerCase()] = true;
+});
 
-        case input.back:
-            player.rot = 180;
+document.addEventListener("keyup", function(e) {
+    keys[e.key.toLowerCase()] = false;
+});
 
-            if (tileIsMovable(player.pos.x, player.pos.y + 1)) {
-                player.pos.y++;
-            }
-            break;
+function update(deltaTime) {
+    let moveX = 0;
+    let moveY = 0;
 
-        case input.left:
-            player.rot = 270;
-
-            if (tileIsMovable(player.pos.x - 1, player.pos.y)) {
-                player.pos.x--;
-            }
-            break;
-
-        case input.right:
-            player.rot = 90;
-
-            if (tileIsMovable(player.pos.x + 1, player.pos.y)) {
-                player.pos.x++;
-            }
-            break;
+    if (keys[input.forward]) {
+        moveY -= 1;
+        player.rot = 0;
     }
 
+    if (keys[input.back]) {
+        moveY += 1;
+        player.rot = 180;
+    }
+
+    if (keys[input.left]) {
+        moveX -= 1;
+        player.rot = 270;
+    }
+
+    if (keys[input.right]) {
+        moveX += 1;
+        player.rot = 90;
+    }
+
+    if (moveX !== 0 && moveY !== 0) {
+        const length = Math.sqrt(moveX * moveX + moveY * moveY);
+
+        moveX /= length;
+        moveY /= length;
+    }
+
+    player.pos.x += moveX * player.speed * deltaTime;
+    player.pos.y += moveY * player.speed * deltaTime;
+}
+
+let lastTime = performance.now();
+
+function gameLoop(currentTime) {
+    const deltaTime = (currentTime - lastTime) / 1000;
+    lastTime = currentTime;
+
+    update(deltaTime);
     render();
-    coords.innerText = player.pos.x + " " + player.pos.y;
-});
+
+    coords.innerText =
+        player.pos.x.toFixed(2) + " " +
+        player.pos.y.toFixed(2);
+
+    requestAnimationFrame(gameLoop);
+}
 
 function drawTile(tileId, screenX, screenY) {
     const pixelX = screenX * TILE_SIZE;
@@ -123,8 +146,11 @@ function render() {
     for (let screenY = 0; screenY < VIEW_TILE_COUNT; screenY++) {
         for (let screenX = 0; screenX < VIEW_TILE_COUNT; screenX++) {
 
-            const mapX = player.pos.x - halfView + screenX;
-            const mapY = player.pos.y - halfView + screenY;
+            const playerTileX = Math.floor(player.pos.x);
+            const playerTileY = Math.floor(player.pos.y);
+
+            const mapX = playerTileX - halfView + screenX;
+            const mapY = playerTileY - halfView + screenY;
 
             if (
                 mapY < 0 ||
@@ -195,7 +221,8 @@ function assetManagerCallback() {
         .split("\n")
         .map(row => row.split(",").map(Number));
 
-    render();
+    lastTime = performance.now();
+    requestAnimationFrame(gameLoop);
 }
 
 assetManager.loadFile('assets/map.csv', 'map', assetManagerCallback);
