@@ -16,9 +16,10 @@ class Player {
 
 const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
-
 ctx.imageSmoothingEnabled = false;
 
+const MAP_VIEW_SIZE = 15;
+const VIEW_TILE_COUNT = MAP_VIEW_SIZE + 2;
 const TILE_SIZE = 32;
 
 const grassImage = new Image();
@@ -40,7 +41,6 @@ playerImages[2].src = "assets/player2.png";
 playerImages[3].src = "assets/player3.png";
 
 const assetManager = new AssetManager();
-const MAP_VIEW_SIZE = 15;
 let tileMap;
 let player = new Player(new Vector(4,4), 0);
 let input = {forward:'w',back:'s',left:'a',right:'d'};
@@ -84,7 +84,7 @@ document.addEventListener('keydown', function(e) {
             break;
     }
 
-    drawCanvasMap();
+    render();
     coords.innerText = player.pos.x + " " + player.pos.y;
 });
 
@@ -115,13 +115,13 @@ function drawTile(tileId, screenX, screenY) {
     }
 }
 
-function drawCanvasMap() {
+function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const halfView = Math.floor((MAP_VIEW_SIZE + 2) / 2);
+    const halfView = Math.floor(VIEW_TILE_COUNT / 2);
 
-    for (let screenY = 0; screenY < MAP_VIEW_SIZE + 2; screenY++) {
-        for (let screenX = 0; screenX < MAP_VIEW_SIZE + 2; screenX++) {
+    for (let screenY = 0; screenY < VIEW_TILE_COUNT; screenY++) {
+        for (let screenX = 0; screenX < VIEW_TILE_COUNT; screenX++) {
 
             const mapX = player.pos.x - halfView + screenX;
             const mapY = player.pos.y - halfView + screenY;
@@ -147,7 +147,7 @@ function drawCanvasMap() {
 }
 
 function drawCanvasPlayer() {
-    const centerTile = Math.floor((MAP_VIEW_SIZE + 2) / 2);
+    const centerTile = Math.floor(VIEW_TILE_COUNT / 2);
 
     let image;
 
@@ -195,8 +195,7 @@ function assetManagerCallback() {
         .split("\n")
         .map(row => row.split(",").map(Number));
 
-    // drawMap();
-    drawCanvasMap();
+    render();
 }
 
 assetManager.loadFile('assets/map.csv', 'map', assetManagerCallback);
