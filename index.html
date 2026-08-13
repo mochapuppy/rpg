@@ -24,18 +24,23 @@
         }
 
         #game {
-            width: 100vh;
-            height: 100vh;
+            display: flex;
             justify-content: center;
             align-items: center;
-            display: flex;
-            overflow: hidden;
+            min-height: 100vh;
+        }
+
+        #game-canvas {
+            width: 816px;
+            height: 816px;
+
+            image-rendering: pixelated;
         }
     </style>
 <body>
     <div id="app">
         <div id="game">
-            <canvas id="game-canvas" width="544" height="544"></canvas>
+            <canvas id="game-canvas" width="272" height="272"></canvas>
         </div>
         <div id="coords" style="color: #fff; font-family: 'Helvetica',serif;">Position</div> <!-- Testing -->
     </div>

@@ -20,7 +20,7 @@ ctx.imageSmoothingEnabled = false;
 
 const MAP_VIEW_SIZE = 15;
 const VIEW_TILE_COUNT = MAP_VIEW_SIZE + 2;
-const TILE_SIZE = 32;
+const TILE_SIZE = 16;
 
 const grassImage = new Image();
 grassImage.src = "assets/grass.png";
