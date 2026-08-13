@@ -12,6 +12,7 @@
         }
 
         #coords {
+            top: 0;
             position: absolute;
         }
 
@@ -19,20 +20,21 @@
             width: 100vw;
             height: 100vh;
             background-color: #222;
+
             display: flex;
             justify-content: center;
+            align-items: center;
         }
 
         #game {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
         }
 
         #game-canvas {
-            width: 816px;
-            height: 816px;
+            width: 704px;
+            height: 704px;
 
             image-rendering: pixelated;
         }
@@ -40,7 +42,7 @@
 <body>
     <div id="app">
         <div id="game">
-            <canvas id="game-canvas" width="272" height="272"></canvas>
+            <canvas id="game-canvas"></canvas>
         </div>
         <div id="coords" style="color: #fff; font-family: 'Helvetica',serif;">Position</div> <!-- Testing -->
     </div>

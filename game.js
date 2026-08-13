@@ -17,11 +17,15 @@ class Player {
 
 const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
-ctx.imageSmoothingEnabled = false;
 
 const VIEW_TILE_COUNT = 11;
 const TILE_SIZE = 16;
 const CANVAS_SIZE = VIEW_TILE_COUNT * TILE_SIZE;
+
+canvas.width = CANVAS_SIZE;
+canvas.height = CANVAS_SIZE;
+
+ctx.imageSmoothingEnabled = false;
 
 const grassImage = new Image();
 grassImage.src = "assets/grass.png";
@@ -143,11 +147,13 @@ function render() {
     const playerTileX = Math.floor(player.pos.x);
     const playerTileY = Math.floor(player.pos.y);
 
-    const offsetX =
-        (player.pos.x - playerTileX) * TILE_SIZE;
+    const offsetX = Math.round(
+        (player.pos.x - playerTileX) * TILE_SIZE
+    );
 
-    const offsetY =
-        (player.pos.y - playerTileY) * TILE_SIZE;
+    const offsetY = Math.round(
+        (player.pos.y - playerTileY) * TILE_SIZE
+    );
 
     for (let screenY = -1; screenY <= VIEW_TILE_COUNT; screenY++) {
         for (let screenX = -1; screenX <= VIEW_TILE_COUNT; screenX++) {
