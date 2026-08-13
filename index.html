@@ -33,63 +33,12 @@
             display: flex;
             overflow: hidden;
         }
-
-        #translate-x {
-            display: flex;
-        }
-
-        #translate-y {
-            display: flex;
-        }
-
-        #map {
-            display: grid;
-            grid-template-columns: repeat(17, var(--tile-size));
-            grid-template-rows: repeat(17, var(--tile-size));
-        }
-
-        #player {
-            display: none;
-            /*z-index: 1;*/
-            /*position: absolute;*/
-            /*display: flex;*/
-            /*width: var(--tile-size);*/
-            /*height: var(--tile-size);*/
-            /*background-size: cover;*/
-            /*image-rendering: pixelated;*/
-            /*background-repeat: no-repeat;*/
-            /*background-image: url("assets/player0.png");*/
-        }
-
-        .tile {
-            width: var(--tile-size);
-            height: var(--tile-size);
-            background-repeat: no-repeat;
-            background-size: cover;
-            image-rendering: pixelated;
-            /*border: 1px black solid;*/
-        }
-
-        .grass {
-            background-image: url("assets/grass.png");
-        }
-
-        .stone {
-            background-image: url("assets/stone.png");
-        }
-
     </style>
     <link rel="stylesheet" type="text/css" href="animations.css"></head>
 <body>
     <div id="app">
         <div id="game">
             <canvas id="game-canvas" width="544" height="544"></canvas>
-            <div id="translate-x">
-                <div id="translate-y">
-<!--                    <div id="map"></div>-->
-                </div>
-            </div>
-            <div id="player"></div>
         </div>
         <div id="coords" style="color: #fff; font-family: 'Helvetica',serif;">Position</div> <!-- Testing -->
     </div>
