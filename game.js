@@ -27,6 +27,18 @@ grassImage.src = "assets/grass.png";
 const stoneImage = new Image();
 stoneImage.src = "assets/stone.png";
 
+const playerImages = [
+    new Image(),
+    new Image(),
+    new Image(),
+    new Image()
+];
+
+playerImages[0].src = "assets/player0.png";
+playerImages[1].src = "assets/player1.png";
+playerImages[2].src = "assets/player2.png";
+playerImages[3].src = "assets/player3.png";
+
 const assetManager = new AssetManager();
 const MAP_VIEW_SIZE = 15;
 let tileMap;
@@ -41,10 +53,50 @@ let immovableTiles = [2, 3];
 // Testing
 let coords = document.getElementById('coords');
 
+document.addEventListener('keydown', function(e) {
+    switch (e.key.toLowerCase()) {
+        case input.forward:
+            player.rot = 0;
+            if (!tileIsMovable(player.pos.x, player.pos.y - 1)) {
+                break;
+            }
+            translateMap('forward');
+            player.pos.y--;
+            break;
+        case input.back:
+            player.rot = 180;
+            if (!tileIsMovable(player.pos.x, player.pos.y + 1)) {
+                break;
+            }
+            translateMap('back');
+            player.pos.y++;
+            break;
+        case input.left:
+            player.rot = 270;
+            if (!tileIsMovable(player.pos.x - 1, player.pos.y)) {
+                break;
+            }
+            translateMap('left');
+            player.pos.x--;
+            break;
+        case input.right:
+            player.rot = 90;
+            if (!tileIsMovable(player.pos.x + 1, player.pos.y)) {
+                break;
+            }
+            translateMap('right');
+            player.pos.x++;
+            break;
+    }
+    // updatePlayerSprite();
+    // drawMap();
+    drawCanvasMap();
+    coords.innerText = player.pos.x + " " + player.pos.y; // Testing
+});
 
-for (let i = 0; i < (MAP_VIEW_SIZE + 2) ** 2; i++) {
-    map.innerHTML += '<div class="tile"></div>'
-}
+// for (let i = 0; i < (MAP_VIEW_SIZE + 2) ** 2; i++) {
+//     map.innerHTML += '<div class="tile"></div>'
+// }
 
 function drawTile(tileId, screenX, screenY) {
     const pixelX = screenX * TILE_SIZE;
@@ -100,48 +152,38 @@ function drawCanvasMap() {
             );
         }
     }
+
+    drawCanvasPlayer();
 }
 
-document.addEventListener('keydown', function(e) {
-    switch (e.key.toLowerCase()) {
-        case input.forward:
-            player.rot = 0;
-            if (!tileIsMovable(player.pos.x, player.pos.y - 1)) {
-                break;
-            }
-            translateMap('forward');
-            player.pos.y--;
+function drawCanvasPlayer() {
+    const centerTile = Math.floor((MAP_VIEW_SIZE + 2) / 2);
+
+    let image;
+
+    switch (player.rot) {
+        case 0:
+            image = playerImages[0];
             break;
-        case input.back:
-            player.rot = 180;
-            if (!tileIsMovable(player.pos.x, player.pos.y + 1)) {
-                break;
-            }
-            translateMap('back');
-            player.pos.y++;
+        case 90:
+            image = playerImages[1];
             break;
-        case input.left:
-            player.rot = 270;
-            if (!tileIsMovable(player.pos.x - 1, player.pos.y)) {
-                break;
-            }
-            translateMap('left');
-            player.pos.x--;
+        case 180:
+            image = playerImages[2];
             break;
-        case input.right:
-            player.rot = 90;
-            if (!tileIsMovable(player.pos.x + 1, player.pos.y)) {
-                break;
-            }
-            translateMap('right');
-            player.pos.x++;
+        case 270:
+            image = playerImages[3];
             break;
     }
-    updatePlayerSprite();
-    // drawMap();
-    drawCanvasMap();
-    coords.innerText = player.pos.x + " " + player.pos.y; // Testing
-});
+
+    ctx.drawImage(
+        image,
+        centerTile * TILE_SIZE,
+        centerTile * TILE_SIZE,
+        TILE_SIZE,
+        TILE_SIZE
+    );
+}
 
 function translateMap(direction) {
     const speed = `0.13s`;
