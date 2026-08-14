@@ -41,18 +41,6 @@ canvas.height = CANVAS_SIZE;
 
 ctx.imageSmoothingEnabled = false;
 
-const layer0 = assetManager.getCSV('layer_0');
-const layer1 = assetManager.getCSV('layer_1');
-const layer2 = assetManager.getCSV('layer_2');
-
-// Following lines not needed, load sprite_sheet.png instead
-
-// const grassImage = new Image();
-// grassImage.src = "assets/sprites/grass.png";
-//
-// const stoneImage = new Image();
-// stoneImage.src = "assets/sprites/stone.png";
-
 const playerImages = [];
 
 for (let i = 0; i < 8; i++) {
@@ -62,7 +50,10 @@ for (let i = 0; i < 8; i++) {
 }
 
 const assetManager = new AssetManager();
-let tileMap;
+let mapLayers = [];
+
+const spriteSheet = new Image();
+spriteSheet.src = "assets/sprites/sprite_sheet.png";
 let player = new Player(new Vector(4,4), 0);
 let input = {forward:'w',back:'s',left:'a',right:'d'};
 
@@ -134,13 +125,34 @@ function update(deltaTime) {
 
     // Update vertical physics before X/Y collision so the current Z controls
     // whether a wall still intersects the player's body.
-    player.velocityZ -= GRAVITY * deltaTime;
-    player.z += player.velocityZ * deltaTime;
+    //
+    // While falling, check whether the player's feet crossed a standable top
+    // surface. This is what lets layer_1 act as a Z=1 platform and layer_2 as
+    // a Z=2 platform (for ordinary height-1 tiles).
+    const previousZ = player.z;
 
-    if (player.z <= GROUND_Z) {
-        player.z = GROUND_Z;
-        player.velocityZ = 0;
-        player.onGround = true;
+    player.velocityZ -= GRAVITY * deltaTime;
+    const nextZ = player.z + player.velocityZ * deltaTime;
+
+    if (player.velocityZ <= 0) {
+        const landingZ = findLandingSurface(
+            player.pos.x,
+            player.pos.y,
+            previousZ,
+            nextZ
+        );
+
+        if (landingZ !== null) {
+            player.z = landingZ;
+            player.velocityZ = 0;
+            player.onGround = true;
+        } else {
+            player.z = nextZ;
+            player.onGround = false;
+        }
+    } else {
+        player.z = nextZ;
+        player.onGround = false;
     }
 
     const nextX = player.pos.x + moveX * currentSpeed * deltaTime;
@@ -179,28 +191,39 @@ function gameLoop(currentTime) {
 }
 
 function drawTile(tileId, pixelX, pixelY) {
-    let image;
+    if (tileId === 0) return;
 
-    switch (tileId) {
-        case 1:
-            image = grassImage;
-            break;
+    const tileType = TILE_TYPES[tileId];
+    const sprite = tileType?.sprite;
 
-        case 2:
-            image = stoneImage;
-            break;
-
-        default:
-            return;
-    }
+    if (!sprite) return;
 
     ctx.drawImage(
-        image,
+        spriteSheet,
+        sprite.x,
+        sprite.y,
+        sprite.width,
+        sprite.height,
         pixelX,
         pixelY,
         RENDER_TILE_SIZE,
         RENDER_TILE_SIZE
     );
+}
+
+// For this rendering pass, each X/Y position shows only the highest
+// non-empty tile. Lower layers are hidden until alpha/occlusion rules exist.
+function getTopVisibleTile(mapX, mapY) {
+    for (let layerIndex = mapLayers.length - 1; layerIndex >= 0; layerIndex--) {
+        const layer = mapLayers[layerIndex];
+        const tileId = layer?.[mapY]?.[mapX] ?? 0;
+
+        if (tileId !== 0) {
+            return tileId;
+        }
+    }
+
+    return 0;
 }
 
 function render() {
@@ -230,9 +253,9 @@ function render() {
 
             if (
                 mapY < 0 ||
-                mapY >= tileMap.length ||
+                mapY >= mapLayers[0].length ||
                 mapX < 0 ||
-                mapX >= tileMap[mapY].length
+                mapX >= mapLayers[0][mapY].length
             ) {
                 continue;
             }
@@ -248,7 +271,7 @@ function render() {
                 + RENDER_TILE_SIZE / 2;
 
             drawTile(
-                tileMap[mapY][mapX],
+                getTopVisibleTile(mapX, mapY),
                 pixelX,
                 pixelY
             );
@@ -280,51 +303,127 @@ function drawCanvasPlayer() {
     );
 }
 
-function positionIsWalkable(x, y, z = player.z) {
+// layer_0 is the base floor at Z=0. layer_1 contains the first block-height
+// above that floor, so a normal height-1 tile there has a top at Z=1.
+// layer_2 begins at Z=1, so a normal height-1 tile there has a top at Z=2.
+// A tile can still be taller than one unit: its TILE_TYPES height extends its
+// top beyond the normal layer boundary.
+function getLayerBaseZ(layerIndex) {
+    return Math.max(0, layerIndex - 1);
+}
+
+function getTileId(layerIndex, tileX, tileY) {
+    return mapLayers[layerIndex]?.[tileY]?.[tileX] ?? 0;
+}
+
+function getTileVolume(layerIndex, tileId) {
+    const tileType = TILE_TYPES[tileId];
+    const height = tileType?.height ?? 0;
+
+    if (height <= 0) return null;
+
+    const bottom = getLayerBaseZ(layerIndex);
+
+    return {
+        bottom,
+        top: bottom + height,
+        standable: tileType.standable === true
+    };
+}
+
+function getPlayerTileBounds(x, y) {
     const halfWidth = player.width / 2;
     const halfHeight = player.height / 2;
-
-    const left   = x - halfWidth;
-    const right  = x + halfWidth;
-    const top    = y - halfHeight;
-    const bottom = y + halfHeight;
-
     const EPSILON = 0.0001;
 
-    const leftTile   = Math.floor(left);
-    const rightTile  = Math.floor(right - EPSILON);
-    const topTile    = Math.floor(top);
-    const bottomTile = Math.floor(bottom - EPSILON);
+    return {
+        left: Math.floor(x - halfWidth),
+        right: Math.floor(x + halfWidth - EPSILON),
+        top: Math.floor(y - halfHeight),
+        bottom: Math.floor(y + halfHeight - EPSILON)
+    };
+}
 
-    for (let tileY = topTile; tileY <= bottomTile; tileY++) {
-        for (let tileX = leftTile; tileX <= rightTile; tileX++) {
+// Find the highest standable surface that the player's feet crossed during
+// this falling step. Checking the full previousZ -> nextZ interval prevents
+// the squirrel from tunneling through a platform on a fast frame.
+function findLandingSurface(x, y, previousZ, nextZ) {
+    const bounds = getPlayerTileBounds(x, y);
+    const EPSILON = 0.0001;
+    let landingZ = null;
 
+    // The base world floor remains Z=0 for this pass.
+    if (
+        previousZ >= GROUND_Z - EPSILON &&
+        nextZ <= GROUND_Z + EPSILON
+    ) {
+        landingZ = GROUND_Z;
+    }
+
+    for (let tileY = bounds.top; tileY <= bounds.bottom; tileY++) {
+        for (let tileX = bounds.left; tileX <= bounds.right; tileX++) {
+            for (let layerIndex = 1; layerIndex < mapLayers.length; layerIndex++) {
+                const tileId = getTileId(layerIndex, tileX, tileY);
+                if (tileId === 0) continue;
+
+                const volume = getTileVolume(layerIndex, tileId);
+                if (!volume?.standable) continue;
+
+                const surfaceZ = volume.top;
+                const crossedSurface =
+                    previousZ >= surfaceZ - EPSILON &&
+                    nextZ <= surfaceZ + EPSILON;
+
+                if (
+                    crossedSurface &&
+                    (landingZ === null || surfaceZ > landingZ)
+                ) {
+                    landingZ = surfaceZ;
+                }
+            }
+        }
+    }
+
+    return landingZ;
+}
+
+function positionIsWalkable(x, y, z = player.z) {
+    const bounds = getPlayerTileBounds(x, y);
+    const EPSILON = 0.0001;
+
+    // layer_0 defines the map's X/Y footprint for now.
+    const worldHeight = mapLayers[0]?.length ?? 0;
+    const worldWidth = mapLayers[0]?.[0]?.length ?? 0;
+
+    for (let tileY = bounds.top; tileY <= bounds.bottom; tileY++) {
+        for (let tileX = bounds.left; tileX <= bounds.right; tileX++) {
             if (
                 tileY < 0 ||
-                tileY >= tileMap.length ||
+                tileY >= worldHeight ||
                 tileX < 0 ||
-                tileX >= tileMap[tileY].length
+                tileX >= worldWidth
             ) {
                 return false;
             }
 
-            const tileId = tileMap[tileY][tileX];
+            // Check every physical layer. A layer_1 height-1 stone occupies
+            // Z=0..1; a layer_2 height-1 stone occupies Z=1..2. Therefore:
+            // - standing exactly on a top surface does not block X/Y movement
+            // - hitting the side while vertically overlapping does block it
+            // - sufficiently high jumps can pass over the object
+            for (let layerIndex = 1; layerIndex < mapLayers.length; layerIndex++) {
+                const tileId = getTileId(layerIndex, tileX, tileY);
+                if (tileId === 0) continue;
 
-            const tileType = TILE_TYPES[tileId];
-
-            // Preserve the current collision behavior during this refactor:
-            // any tile definition with positive height blocks X/Y while the
-            // player vertically overlaps it. Elevated standing comes next.
-            if ((tileType?.height ?? 0) > 0) {
-                const obstacleBottom = 0;
-                const obstacleTop = tileType.height;
+                const volume = getTileVolume(layerIndex, tileId);
+                if (!volume) continue;
 
                 const playerBottom = z;
                 const playerTop = z + player.bodyHeight;
 
                 const overlapsVertically =
-                    playerBottom < obstacleTop &&
-                    playerTop > obstacleBottom;
+                    playerBottom < volume.top - EPSILON &&
+                    playerTop > volume.bottom + EPSILON;
 
                 if (overlapsVertically) {
                     return false;
@@ -337,7 +436,11 @@ function positionIsWalkable(x, y, z = player.z) {
 }
 
 function assetManagerCallback() {
-    tileMap = assetManager.getCSV('map');
+    mapLayers = [
+        assetManager.getCSV('layer_0'),
+        assetManager.getCSV('layer_1'),
+        assetManager.getCSV('layer_2')
+    ];
 
     lastTime = performance.now();
     requestAnimationFrame(gameLoop);

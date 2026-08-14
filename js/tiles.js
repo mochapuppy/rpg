@@ -1,7 +1,7 @@
 // Central definitions for tile IDs used by map CSV files.
 //
-// Map files only need to store numeric IDs. Behavior and other tile metadata
-// live here so changing a tile type does not require editing every map.
+// CSV files only store numeric tile IDs. Behavior and sprite-sheet regions
+// live here so maps stay simple to author.
 const TILE_TYPES = {
     0: {
         name: "empty"
@@ -9,13 +9,25 @@ const TILE_TYPES = {
 
     1: {
         name: "grass",
-        height: 0
+        height: 0,
+        sprite: {
+            x: 0,
+            y: 0,
+            width: 16,
+            height: 16
+        }
     },
 
     2: {
         name: "stone",
         height: 1,
-        standable: true
+        standable: true,
+        sprite: {
+            x: 16,
+            y: 0,
+            width: 16,
+            height: 16
+        }
     },
 
     3: {
