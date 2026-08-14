@@ -1,4 +1,5 @@
 import AssetManager from "./asset_manager.js";
+import TILE_TYPES from "./tiles.js";
 
 class Vector {
     constructor(x, y) {
@@ -41,16 +42,16 @@ canvas.height = CANVAS_SIZE;
 ctx.imageSmoothingEnabled = false;
 
 const grassImage = new Image();
-grassImage.src = "assets/grass.png";
+grassImage.src = "assets/sprites/grass.png";
 
 const stoneImage = new Image();
-stoneImage.src = "assets/stone.png";
+stoneImage.src = "assets/sprites/stone.png";
 
 const playerImages = [];
 
 for (let i = 0; i < 8; i++) {
     const image = new Image();
-    image.src = `assets/player${i}.png`;
+    image.src = `assets/sprites/player${i}.png`;
     playerImages.push(image);
 }
 
@@ -58,18 +59,12 @@ const assetManager = new AssetManager();
 let tileMap;
 let player = new Player(new Vector(4,4), 0);
 let input = {forward:'w',back:'s',left:'a',right:'d'};
-let immovableTiles = [2, 3];
 
 // Vertical movement, in tile units.
 const GRAVITY = 18;
 const JUMP_SPEED = 7;
 const GROUND_Z = 0;
 
-// Collision height of each solid tile. Later this can come from a height map.
-const tileCollisionHeights = {
-    2: 1,
-    3: 1
-};
 
 // Testing
 let coords = document.getElementById('coords');
@@ -309,9 +304,14 @@ function positionIsWalkable(x, y, z = player.z) {
 
             const tileId = tileMap[tileY][tileX];
 
-            if (immovableTiles.includes(tileId)) {
+            const tileType = TILE_TYPES[tileId];
+
+            // Preserve the current collision behavior during this refactor:
+            // any tile definition with positive height blocks X/Y while the
+            // player vertically overlaps it. Elevated standing comes next.
+            if ((tileType?.height ?? 0) > 0) {
                 const obstacleBottom = 0;
-                const obstacleTop = tileCollisionHeights[tileId] ?? 1;
+                const obstacleTop = tileType.height;
 
                 const playerBottom = z;
                 const playerTop = z + player.bodyHeight;
@@ -331,14 +331,10 @@ function positionIsWalkable(x, y, z = player.z) {
 }
 
 function assetManagerCallback() {
-    tileMap = assetManager
-        .get('map')
-        .trim()
-        .split("\n")
-        .map(row => row.split(",").map(Number));
+    tileMap = assetManager.getCSV('map');
 
     lastTime = performance.now();
     requestAnimationFrame(gameLoop);
 }
 
-assetManager.loadFile('assets/map.csv', 'map', assetManagerCallback);
+assetManager.loadFile('assets/maps/map.csv', 'map', assetManagerCallback);

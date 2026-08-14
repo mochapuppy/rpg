@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0e716c8f-6c93-43cd-a631-027adfa676aa" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/squirrel rpg.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Online RPG.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset_manager.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/grass.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/map.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/player0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/player1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/player2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/player3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/player4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/player5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/player6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/player7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/stone.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2lJMKVoe4DQNP8Vmu9sD7uuwGFH" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0e716c8f-6c93-43cd-a631-027adfa676aa" name="Changes" comment="" />
+      <created>1724893662604</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1724893662604</updated>
+      <workItem from="1724893663732" duration="894000" />
+      <workItem from="1724945813921" duration="890000" />
+      <workItem from="1725376297056" duration="10000" />
+      <workItem from="1725477691994" duration="53000" />
+      <workItem from="1725484227831" duration="2188000" />
+      <workItem from="1725502704306" duration="157000" />
+      <workItem from="1725502985207" duration="14000" />
+      <workItem from="1725503079201" duration="2710000" />
+      <workItem from="1725648282301" duration="97000" />
+      <workItem from="1725822652116" duration="3491000" />
+      <workItem from="1726084339035" duration="148000" />
+      <workItem from="1726084659438" duration="594000" />
+      <workItem from="1726085823738" duration="1714000" />
+      <workItem from="1726587084878" duration="25000" />
+      <workItem from="1726777973686" duration="82000" />
+      <workItem from="1726787999082" duration="200000" />
+      <workItem from="1768697099503" duration="1044000" />
+      <workItem from="1768937610243" duration="724000" />
+      <workItem from="1769047392131" duration="25000" />
+      <workItem from="1786576697187" duration="39000" />
+      <workItem from="1786577083940" duration="3959000" />
+      <workItem from="1786585008899" duration="8729000" />
+      <workItem from="1786650523595" duration="2257000" />
+      <workItem from="1786734201066" duration="3709000" />
+    </task>
+    <task id="LOCAL-00001" summary="fix some bugs in the code">
+      <option name="closed" value="true" />
+      <created>1786577810704</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1786577810704</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix some bugs in the code" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix some bugs in the code" />
+  </component>
+</project>
