@@ -45,11 +45,13 @@ const layer0 = assetManager.getCSV('layer_0');
 const layer1 = assetManager.getCSV('layer_1');
 const layer2 = assetManager.getCSV('layer_2');
 
-const grassImage = new Image();
-grassImage.src = "assets/sprites/grass.png";
+// Following lines not needed, load sprite_sheet.png instead
 
-const stoneImage = new Image();
-stoneImage.src = "assets/sprites/stone.png";
+// const grassImage = new Image();
+// grassImage.src = "assets/sprites/grass.png";
+//
+// const stoneImage = new Image();
+// stoneImage.src = "assets/sprites/stone.png";
 
 const playerImages = [];
 
