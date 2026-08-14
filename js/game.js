@@ -41,6 +41,10 @@ canvas.height = CANVAS_SIZE;
 
 ctx.imageSmoothingEnabled = false;
 
+const layer0 = assetManager.getCSV('layer_0');
+const layer1 = assetManager.getCSV('layer_1');
+const layer2 = assetManager.getCSV('layer_2');
+
 const grassImage = new Image();
 grassImage.src = "assets/sprites/grass.png";
 
@@ -337,4 +341,10 @@ function assetManagerCallback() {
     requestAnimationFrame(gameLoop);
 }
 
-assetManager.loadFile('assets/maps/map.csv', 'map', assetManagerCallback);
+// assetManager.loadFile('assets/maps/map.csv', 'map', assetManagerCallback);
+
+assetManager.loadFiles([
+    { path: 'assets/maps/layer_0.csv', name: 'layer_0' },
+    { path: 'assets/maps/layer_1.csv', name: 'layer_1' },
+    { path: 'assets/maps/layer_2.csv', name: 'layer_2' }
+], assetManagerCallback);

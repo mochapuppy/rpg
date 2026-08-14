@@ -5,23 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e716c8f-6c93-43cd-a631-027adfa676aa" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/squirrel rpg.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Online RPG.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset_manager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/grass.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/map.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/player0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/player1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/player2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/player3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/player4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/player5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/player6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/player7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/stone.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/maps/layer_0.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/maps/layer_1.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/maps/layer_2.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/game.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/game.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,12 +23,16 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2lJMKVoe4DQNP8Vmu9sD7uuwGFH" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
@@ -90,7 +82,7 @@
       <workItem from="1786577083940" duration="3959000" />
       <workItem from="1786585008899" duration="8729000" />
       <workItem from="1786650523595" duration="2257000" />
-      <workItem from="1786734201066" duration="3709000" />
+      <workItem from="1786734201066" duration="4317000" />
     </task>
     <task id="LOCAL-00001" summary="fix some bugs in the code">
       <option name="closed" value="true" />
@@ -118,6 +110,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="fix some bugs in the code" />
     <option name="LAST_COMMIT_MESSAGE" value="fix some bugs in the code" />
   </component>
